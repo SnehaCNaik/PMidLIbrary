@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PM Roles & Job Description Library</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (via CDN for clean vector iconography) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar styling for extreme minimalism */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.25);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.45);
+    }
+    /* Smooth transition for active tab tracking bar */
+    .active-indicator {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 min-h-screen font-sans antialiased transition-colors duration-200">
+
+<div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+  <!-- Header Block -->
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-zinc-200/70 dark:border-zinc-800/80 pb-6">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-900/50">Interactive Framework</span>
+        <span class="text-zinc-400 dark:text-zinc-600 text-xs">•</span>
+        <span class="text-zinc-500 dark:text-zinc-400 text-xs font-medium">9 Archetypes</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        Interactive PM Roles Library
+      </h1>
+      <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-xl">
+        Explore precise responsibilities, tool stacks, domain knowledge, and target companies for modern product roles.
+      </p>
+    </div>
+
+    <!-- Global Controls -->
+    <div class="flex items-center gap-3 w-full md:w-auto">
+      <!-- Search Input -->
+      <div class="relative w-full md:w-64">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-400 dark:text-zinc-500">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </span>
+        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search roles, tools, skills..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+      </div>
+      
+      <!-- Theme Switcher -->
+      <button onclick="toggleDarkMode()" aria-label="Toggle Dark Mode" class="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shrink-0">
+        <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive Sandbox & Dashboard Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left Column: Navigation & Profile Matcher (lg:col-span-4) -->
+    <aside class="col-span-1 lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-6">
+      
+      <!-- Matcher Panel (Dynamic Fit Quiz) -->
+      <div class="bg-white dark:bg-zinc-900/60 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="p-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </span>
+            <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Dynamic Fit Profiler</h3>
+          </div>
+          <button onclick="resetProfiler()" class="text-[11px] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 underline font-medium">Reset</button>
+        </div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-5 leading-relaxed">
+          Adjust the parameters below to see which PM specialties match your skillset and experience level in real-time.
+        </p>
+
+        <!-- Profiler Sliders -->
+        <div class="space-y-4">
+          <!-- Experience Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <span class="text-zinc-500 dark:text-zinc-400">Experience Level</span>
+              <span id="expVal" class="text-zinc-900 dark:text-zinc-100 font-semibold">4 Years</span>
+            </div>
+            <input type="range" id="sliderExp" min="0" max="15" value="4" oninput="updateProfiler()" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg appearance-none">
+            <div class="flex justify-between text-[9px] text-zinc-400 mt-1">
+              <span>Junior (0)</span>
+              <span>Mid</span>
+              <span>Principal (12+)</span>
+            </div>
+          </div>
+
+          <!-- Tech Depth Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <span class="text-zinc-500 dark:text-zinc-400">Technical Depth</span>
+              <span id="techVal" class="text-zinc-900 dark:text-zinc-100 font-semibold">Medium</span>
+            </div>
+            <input type="range" id="sliderTech" min="0" max="100" value="50" oninput="updateProfiler()" class="w-full accent-indigo-500 cursor-pointer h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg appearance-none">
+            <div class="flex justify-between text-[9px] text-zinc-400 mt-1">
+              <span>No-code</span>
+              <span>Sys Design / APIs</span>
+              <span>Highly Technical</span>
+            </div>
+          </div>
+
+          <!-- Data/Analytics Focus -->
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <span class="text-zinc-500 dark:text-zinc-400">Data / Analytics Bias</span>
+              <span id="dataVal" class="text-zinc-900 dark:text-zinc-100 font-semibold">Medium</span>
+            </div>
+            <input type="range" id="sliderData" min="0" max="100" value="50" oninput="updateProfiler()" class="w-full accent-blue-500 cursor-pointer h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg appearance-none">
+            <div class="flex justify-between text-[9px] text-zinc-400 mt-1">
+              <span>Basic metrics</span>
+              <span>A/B Testing</span>
+              <span>Data Pipelines / ML</span>
+            </div>
+          </div>
+
+          <!-- Business / GTM Focus -->
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <span class="text-zinc-500 dark:text-zinc-400">GTM & Business Bias</span>
+              <span id="bizVal" class="text-zinc-900 dark:text-zinc-100 font-semibold">Medium</span>
+            </div>
+            <input type="range" id="sliderBiz" min="0" max="100" value="50" oninput="updateProfiler()" class="w-full accent-amber-500 cursor-pointer h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg appearance-none">
+            <div class="flex justify-between text-[9px] text-zinc-400 mt-1">
+              <span>Pure Exec</span>
+              <span>Pricing & GTM</span>
+              <span>Enterprise & Sales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Navigation Selector List -->
+      <div class="flex flex-col gap-2">
+        <h3 class="text-[11px] font-semibold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase px-1">Select PM Role</h3>
+        
+        <!-- Mobile horizontal sliding nav, Desktop stacked list -->
+        <div id="roleGrid" class="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 scroll-smooth snap-x">
+          <!-- Populated dynamically via Javascript -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Column: Interactive Job Description Detail Container (lg:col-span-8) -->
+    <main class="col-span-1 lg:col-span-8 bg-white dark:bg-zinc-900/40 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm p-6 md:p-8 min-h-[500px]">
+      <div id="jdContainer" class="space-y-6">
+        <!-- Main Job Description content renders here dynamically -->
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- Copy Success Toast Alert -->
+<div id="toast" class="fixed bottom-6 right-6 px-4 py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl text-xs font-medium shadow-lg flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+  <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+  <span id="toastMessage">Job description copied!</span>
+</div>
+
+<script>
+// Thorough, structured data with customized dynamic evaluations and fallback fitNotes
+const ROLES = [
+  {
+    id: "ai",
+    label: "AI / ML PM",
+    color: "#6366F1", // Indigo
+    bg: "rgba(99, 102, 241, 0.1)",
+    level: "Senior · 4-7 yrs",
+    comp: "₹40-80L / $120-200K",
+    domain: ["LLM fine-tuning basics", "RAG architecture", "Vector databases", "Evaluation frameworks", "AI safety & red-teaming", "Token economics", "Model cards"],
+    targetExp: 6,
+    weightTech: 0.85,
+    weightData: 0.80,
+    weightBiz: 0.40,
+    fitNote: "AI/ML PMs balance cutting-edge model exploration with user value. High Technical depth & prompt engineering are required.",
+    responsibilities: [
+      { bold: "Define AI product strategy:", rest: " own the roadmap for LLM-powered features, ML models, and AI-native workflows. Translate research capabilities into user-facing product decisions." },
+      { bold: "Model evaluation ownership:", rest: " write model evaluation criteria, define success thresholds (accuracy, latency, hallucination rate, cost-per-inference), and run structured evals before shipping." },
+      { bold: "Prompt engineering & system design:", rest: " design prompt architectures, context windows, and retrieval pipelines (RAG) in collaboration with ML engineers. Own the prompt layer as a product asset." },
+      { bold: "AI feature A/B testing:", rest: " design experiments that account for model non-determinism — define control groups, guard rails, and rollback criteria for AI features." },
+      { bold: "Feedback loop design:", rest: " build mechanisms to capture model errors, route user corrections back to training pipelines, and close the data flywheel." },
+      { bold: "AI cost management:", rest: " monitor token costs, inference costs, and GPU utilisation. Make build-vs-fine-tune-vs-API trade-off decisions with engineering and finance." },
+      { bold: "Cross-functional AI leadership:", rest: " align research, engineering, design, legal (AI risk), and trust & safety teams on what ships and when." },
+      { bold: "AI roadmap communication:", rest: " translate model capabilities and limitations to executives, customers, and non-technical stakeholders without overpromising." }
+    ],
+    kpis: [
+      { k: "Model accuracy / F1 score", v: "≥90% threshold" },
+      { k: "Hallucination / error rate", v: "<2% at launch" },
+      { k: "Inference latency (p95)", v: "<500ms" },
+      { k: "Cost per inference", v: "Track vs budget" },
+      { k: "AI feature adoption rate", v: "% of MAU using AI" },
+      { k: "Feedback loop closure rate", v: "Errors routed to retrain" }
+    ],
+    tools: ["OpenAI API", "Anthropic API", "Hugging Face", "LangChain", "LlamaIndex", "Weights & Biases", "Datadog (AI)", "Amplitude", "Mixpanel", "Jira", "Notion", "Python", "SQL"],
+    aiTools: ["Claude", "ChatGPT", "Perplexity", "Cursor", "GitHub Copilot", "Runway"],
+    companies: ["Anthropic", "OpenAI", "Google DeepMind", "Cohere", "Mistral", "AI-first startups"]
+  },
+  {
+    id: "growth",
+    label: "Growth PM",
+    color: "#0D9488", // Teal
+    bg: "rgba(13, 148, 136, 0.1)",
+    level: "Mid-Senior · 3-6 yrs",
+    comp: "₹30-60L / $100-160K",
+    domain: ["Statistical significance", "Sample size calculation", "Novelty effect", "Network effects", "Viral coefficient", "LTV:CAC ratio", "Payback period", "Cohort analysis"],
+    targetExp: 4,
+    weightTech: 0.35,
+    weightData: 0.90,
+    weightBiz: 0.75,
+    fitNote: "Growth PMs rule the customer funnel. Deep analytical logic, speed of A/B testing, and growth marketing heuristics are essential.",
+    responsibilities: [
+      { bold: "Funnel ownership:", rest: " own the full AARRR funnel — identify the biggest leakage point, hypothesise causes, design experiments, ship, and measure. Repeat weekly." },
+      { bold: "Activation experiment design:", rest: " define the 'aha moment', instrument the path to it, and run onboarding experiments to reduce time-to-value and increase Day-1 activation." },
+      { bold: "Retention loops:", rest: " identify habit-forming triggers, design notification and re-engagement strategies, and monitor D1/D7/D30 cohort retention curves." },
+      { bold: "Growth model ownership:", rest: " build and maintain a quantitative growth model — inputs (traffic, conversion, churn) → output (MAU, ARR). Use it to forecast and prioritise." },
+      { bold: "Referral and viral mechanics:", rest: " design and test viral loops, referral programs, and sharing features. Track viral coefficient (K-factor) and payback period." },
+      { bold: "Experiment velocity:", rest: " run 5-10 A/B tests per sprint. Maintain a test log with hypothesis, sample size, duration, result, and follow-up action." },
+      { bold: "Growth analytics:", rest: " build and own funnel dashboards in Amplitude or Mixpanel. Segment by cohort, acquisition channel, geography, and device." },
+      { bold: "PLG motion:", rest: " if product-led growth, own the free-to-paid conversion journey — identify upgrade triggers, design paywall moments, and track expansion revenue." }
+    ],
+    kpis: [
+      { k: "D1 / D7 / D30 retention", v: "Benchmark + beat" },
+      { k: "Activation rate", v: "% hitting aha moment" },
+      { k: "MoM MAU growth", v: "Target %" },
+      { k: "Experiment velocity", v: "Tests/sprint" },
+      { k: "CAC payback period", v: "Months" },
+      { k: "Free-to-paid conversion", v: "% for PLG" }
+    ],
+    tools: ["Amplitude", "Mixpanel", "Braze", "Clevertap", "Segment", "LaunchDarkly", "Optimizely", "Google Analytics 4", "Hotjar", "SQL", "Looker", "dbt"],
+    aiTools: ["Claude (copy variants)", "ChatGPT (hypothesis gen)", "Perplexity"],
+    companies: ["Zomato", "Swiggy", "PhonePe", "CRED", "Meesho", "Any PLG SaaS"]
+  },
+  {
+    id: "consumer",
+    label: "Consumer PM",
+    color: "#2563EB", // Blue
+    bg: "rgba(37, 99, 235, 0.1)",
+    level: "Mid-Senior · 3-7 yrs",
+    comp: "₹25-55L / $90-150K",
+    domain: ["Hook Model", "JTBD", "Kano Model", "Mobile release cadence", "App store optimisation (ASO)", "Push notification best practices", "Content personalisation"],
+    targetExp: 5,
+    weightTech: 0.40,
+    weightData: 0.70,
+    weightBiz: 0.65,
+    fitNote: "Highly empathy-driven role targeting scalable B2C applications. Focuses on intuitive user interactions and engagement metrics.",
+    responsibilities: [
+      { bold: "User research leadership:", rest: " run qualitative interviews, usability tests, and diary studies. Synthesise into Jobs-to-be-Done and Opportunity Solution Trees. Ship research insights as product decisions, not slide decks." },
+      { bold: "Feature roadmap ownership:", rest: " maintain and communicate a rolling 3-quarter roadmap. Balance new features vs. quality vs. platform work using RICE or ICE scoring." },
+      { bold: "Mobile product execution:", rest: " own Android and iOS feature specs, coordinate with platform engineers on release trains, and manage Play Console / App Store reviews and ratings strategy." },
+      { bold: "Onboarding and activation:", rest: " reduce time-to-value for new users. Design onboarding flows, empty states, and first-session experiences. Track activation cohorts weekly." },
+      { bold: "Engagement and habit design:", rest: " use the Hook Model (trigger → action → reward → investment) to build habit-forming product loops. Track session frequency, session length, and stickiness (DAU/MAU)." },
+      { bold: "Content and personalisation:", rest: " if content product — define personalisation logic, curation algorithms, and content quality signals. Work with ML team on recommendation features." },
+      { bold: "NPS and qualitative feedback loops:", rest: " run NPS surveys, app store review analysis, and support ticket triage to surface user sentiment as a leading indicator." },
+      { bold: "Launch planning:", rest: " coordinate feature launches across marketing, support, legal, and comms. Write internal and external launch briefs." }
+    ],
+    kpis: [
+      { k: "DAU / MAU (stickiness)", v: "DAU/MAU ratio" },
+      { k: "D1 / D7 / D30 retention", v: "Cohort curves" },
+      { k: "Session length + frequency", v: "Mins & sessions/week" },
+      { k: "App store rating", v: "≥4.5 target" },
+      { k: "NPS", v: "Track quarterly" },
+      { k: "Feature adoption rate", v: "% MAU using feature" }
+    ],
+    tools: ["Mixpanel", "Amplitude", "Firebase", "Hotjar", "UserTesting", "Maze", "Figma", "Jira", "Miro", "App Store Connect", "Play Console", "Clevertap", "Branch.io"],
+    aiTools: ["Claude (PRDs)", "ChatGPT (user stories)", "Dovetail AI", "Maze AI"],
+    companies: ["Duolingo", "Instagram", "Meesho", "PhonePe", "Navi", "Swiggy", "B2C Apps"]
+  },
+  {
+    id: "b2b",
+    label: "B2B SaaS PM",
+    color: "#D97706", // Amber
+    bg: "rgba(217, 119, 6, 0.1)",
+    level: "Mid-Senior · 3-6 yrs",
+    comp: "₹25-50L / $90-140K",
+    domain: ["Enterprise sales cycle", "Procurement process", "Security compliance (SOC 2, GDPR)", "RBAC", "SSO/SAML", "QBR structure", "Champion vs economic buyer", "NRR math"],
+    targetExp: 4,
+    weightTech: 0.50,
+    weightData: 0.60,
+    weightBiz: 0.90,
+    fitNote: "B2B SaaS PMs satisfy corporate economic buyers and final operators. Requires heavy commercial, security, and integration chops.",
+    responsibilities: [
+      { bold: "Champion and economic buyer management:", rest: " understand the difference between the person who uses your product (champion) and the person who signs the contract (economic buyer). Design features and communication for both." },
+      { bold: "Enterprise feature development:", rest: " build features for admin panels, role-based access control (RBAC), SSO/SAML, audit logs, and compliance requirements (GDPR, SOC 2). These are table stakes for enterprise." },
+      { bold: "Customer success partnership:", rest: " work with CS to build onboarding playbooks, health score models, and QBR (quarterly business review) frameworks. Low health score = churn risk = your problem." },
+      { bold: "ARR and NRR ownership:", rest: " understand how your product decisions affect Annual Recurring Revenue and Net Revenue Retention (NRR). Expansion, renewal, and churn are product metrics, not just sales metrics." },
+      { bold: "Feedback loops from enterprise accounts:", rest: " run structured customer advisory board (CAB) sessions, executive sponsor calls, and win/loss analysis. Translate enterprise requests into roadmap decisions without being feature-farmed." },
+      { bold: "Pricing and packaging:", rest: " work with sales and finance on tier design, feature gating, and usage limits. Understand when to gate a feature (drives upgrade) vs. include it (drives adoption)." },
+      { bold: "Integration ecosystem:", rest: " own the integration roadmap — Salesforce, HubSpot, Slack, SSO, Zapier. Integrations drive stickiness and reduce churn." },
+      { bold: "Compliance and security features:", rest: " prioritise security features that unblock enterprise deals. GDPR, SOC 2, VAPT, data residency — know what's required, when." }
+    ],
+    kpis: [
+      { k: "ARR (Recurring Revenue)", v: "$X target" },
+      { k: "NRR (Net Revenue)", v: "≥110% healthy" },
+      { k: "Logo churn rate", v: "<5% annually" },
+      { k: "Time to value (TTV)", v: "Days to first aha" },
+      { k: "Expansion revenue", v: "Upsell + cross %" },
+      { k: "CSAT / support tickets", v: "Track monthly" }
+    ],
+    tools: ["Jira", "Productboard", "Salesforce", "HubSpot", "Gainsight", "Intercom", "Zendesk", "Mixpanel", "Looker", "Figma", "Miro", "Notion"],
+    aiTools: ["Claude (Enterprise PRDs)", "Gong AI", "ChatGPT (RFP responses)"],
+    companies: ["Freshworks", "Zoho", "Chargebee", "Darwinbox", "Leapsome", "Salesforce India", "Enterprise SaaS"]
+  },
+  {
+    id: "data",
+    label: "Data PM",
+    color: "#059669", // Emerald
+    bg: "rgba(5, 150, 105, 0.1)",
+    level: "Mid-Senior · 3-6 yrs",
+    comp: "₹30-60L / $100-150K",
+    domain: ["Data warehousing basics", "ETL/ELT pipelines", "Dimensional modelling", "Data contracts", "Statistical testing", "A/B testing infrastructure", "PII/GDPR compliance", "dbt basics"],
+    targetExp: 5,
+    weightTech: 0.70,
+    weightData: 0.95,
+    weightBiz: 0.45,
+    fitNote: "Data PMs treat corporate data warehouses and pipelines as internal products. Outstanding SQL/analytics and schema logic are vital.",
+    responsibilities: [
+      { bold: "Data product strategy:", rest: " own the roadmap for internal or external data products — analytics dashboards, self-serve BI tools, data pipelines, or data APIs. Treat data as a product with users, not just infrastructure." },
+      { bold: "Data quality ownership:", rest: " define data quality standards — accuracy, completeness, freshness, lineage. Partner with data engineering to build data contracts and SLA monitoring." },
+      { bold: "Self-serve analytics:", rest: " build tools that let non-technical users (ops, sales, marketing) answer their own data questions without filing a ticket to data engineering." },
+      { bold: "Data governance:", rest: " work with legal and security on data access controls, PII handling, retention policies, and compliance. Know when data can be used and when it can't." },
+      { bold: "Metrics layer ownership:", rest: " define the company's canonical metrics — what is DAU, how is revenue calculated, what counts as an active user. Prevent metric proliferation and contradictory dashboards." },
+      { bold: "Experimentation platform:", rest: " own or collaborate on the A/B testing infrastructure — randomisation, assignment, metric computation, and statistical significance reporting." },
+      { bold: "Data literacy across the org:", rest: " run training, write documentation, and create templates that help non-data teams use data products effectively." },
+      { bold: "External data products:", rest: " if customer-facing — build analytics dashboards for clients, usage reports, and insights APIs that become part of the product's value proposition." }
+    ],
+    kpis: [
+      { k: "Data product adoption", v: "Internal WAUs" },
+      { k: "Self-serve query rate", v: "% metrics answered self-serve" },
+      { k: "Data freshness SLA", v: "Lag in mins/hours" },
+      { k: "Pipeline reliability", v: "% uptime" },
+      { k: "Time to insight", v: "Minutes from question" },
+      { k: "Metrics consistency", v: "Single source of truth" }
+    ],
+    tools: ["Looker", "dbt", "Snowflake", "BigQuery", "Redshift", "Airflow", "Fivetran", "Metabase", "Amplitude", "SQL", "Python", "Tableau", "Mode"],
+    aiTools: ["Claude (SQL gen)", "ChatGPT (Data stories)", "Julius AI"],
+    companies: ["Razorpay", "Clevertap", "Lemnisk", "Segment", "MoEngage", "Data Infrastructure orgs"]
+  },
+  {
+    id: "technical",
+    label: "Technical PM",
+    color: "#E11D48", // Rose
+    bg: "rgba(225, 29, 72, 0.1)",
+    level: "Mid-Senior · 3-7 yrs",
+    comp: "₹30-65L / $110-160K",
+    domain: ["REST vs GraphQL vs gRPC", "OAuth 2.0 / JWT", "Webhooks", "Rate limiting", "SLO/SLA/SLI", "DORA metrics", "Microservices", "Cloud cost optimisation", "API versioning"],
+    targetExp: 5,
+    weightTech: 0.95,
+    weightData: 0.65,
+    weightBiz: 0.40,
+    fitNote: "Developer tools, integrations, APIs, and microservice infrastructure. Solid architecture evaluation and developer experience (DX) are standard.",
+    responsibilities: [
+      { bold: "API product ownership:", rest: " write API specs (OpenAPI/Swagger), define versioning strategy, design developer experience (DX), and own the API as a product — with its own roadmap, docs, and SLAs." },
+      { bold: "Platform and infrastructure roadmap:", rest: " translate engineering platform needs (reliability, scalability, latency) into a prioritised product roadmap. Balance technical debt vs. new capability." },
+      { bold: "Developer experience:", rest: " if developer-facing product — own SDK quality, documentation, onboarding flow, sandbox environment, and error messages. Measure developer time-to-first-API-call (TTFAC)." },
+      { bold: "System design participation:", rest: " participate in architecture reviews, evaluate technical trade-offs (sync vs. async, SQL vs. NoSQL, monolith vs. microservices), and make informed build-vs-buy decisions." },
+      { bold: "Incident and reliability ownership:", rest: " define SLOs (Service Level Objectives) and error budgets. Work with SRE on incident response. Own the post-mortem process." },
+      { bold: "Security and compliance features:", rest: " prioritise security features — OAuth, JWT, rate limiting, audit logs, penetration testing. Understand what breaks in production and why." },
+      { bold: "Internal platform products:", rest: " if internal — build tools that increase developer velocity. Measure deployment frequency, lead time for changes, MTTR, and change failure rate (DORA metrics)." },
+      { bold: "Technical stakeholder communication:", rest: " write engineering briefs, participate in sprint planning as a technical peer, and translate product requirements into technical acceptance criteria without losing nuance." }
+    ],
+    kpis: [
+      { k: "API uptime / SLO", v: "99.9% typical" },
+      { k: "API latency (p95/p99)", v: "<200ms target" },
+      { k: "Developer TTFAC", v: "Minutes" },
+      { k: "Deployment frequency", v: "DORA scale" },
+      { k: "MTTR", v: "Minutes target" },
+      { k: "Change failure rate", v: "<10% typical" }
+    ],
+    tools: ["Postman", "Swagger/OpenAPI", "Jira", "GitHub/GitLab", "PagerDuty", "Datadog", "New Relic", "AWS Console", "Figma", "Notion", "SQL", "Confluence"],
+    aiTools: ["GitHub Copilot", "Claude (API docs)", "ChatGPT (spec drafting)", "Cursor"],
+    companies: ["Razorpay", "Juspay", "Setu", "Cashfree", "Stripe India", "Twilio", "Developer tool startups"]
+  },
+  {
+    id: "gtm",
+    label: "GTM / Platform PM",
+    color: "#C026D3", // Fuchsia
+    bg: "rgba(192, 38, 211, 0.1)",
+    level: "Mid · 2-5 yrs",
+    comp: "₹20-45L / $80-130K",
+    domain: ["TAM/SAM/SOM modelling", "Porter's Five Forces", "Market entry strategy", "Localisation (l18n/i10n)", "Regulatory compliance basics", "Partnership models", "Platform economics", "Revenue share structures"],
+    targetExp: 3.5,
+    weightTech: 0.40,
+    weightData: 0.55,
+    weightBiz: 0.85,
+    fitNote: "Handles localization, regulatory frameworks, strategic launches, and ecosystem partnerships. Strong business design required.",
+    responsibilities: [
+      { bold: "Launch strategy and execution:", rest: " own the end-to-end product launch plan — positioning, pricing, channel strategy, enablement, and success metrics. Coordinate across product, marketing, sales, and support." },
+      { bold: "Market sizing and prioritisation:", rest: " build TAM/SAM/SOM models for new markets. Score and prioritise market opportunities using impact × confidence × effort frameworks." },
+      { bold: "Localisation and internationalisation:", rest: " own l18n/i10n roadmap — language support, currency, regulatory compliance, culturally appropriate UX. Work with local teams on market-specific requirements." },
+      { bold: "Competitive intelligence:", rest: " maintain a live competitive landscape. Run win/loss analysis with sales. Identify whitespace opportunities before competitors do." },
+      { bold: "Platform ecosystem:", rest: " if platform PM — own the developer/partner ecosystem, marketplace, and integration strategy. Define platform APIs, partner tiers, and revenue share models." },
+      { bold: "GTM metrics ownership:", rest: " define and track launch success metrics — activation rate, time to first value, NPS at 30 days, and revenue attribution by channel." },
+      { bold: "Sales and marketing enablement:", rest: " write product one-pagers, sales decks, battlecards, and demo scripts. Train sales and CS on new features before launch." },
+      { bold: "Feedback loop from market:", rest: " run post-launch retrospectives, capture market feedback systematically, and feed it back into the roadmap within one sprint." }
+    ],
+    kpis: [
+      { k: "Launch activation rate", v: "% D7 activation" },
+      { k: "Time to market revenue", v: "Days from launch" },
+      { k: "Win rate", v: "% vs competitor" },
+      { k: "Partner ecosystem", v: "Ecosystem integration count" },
+      { k: "NPS (30 days post)", v: "Score threshold" },
+      { k: "Market penetration", v: "% of local TAM" }
+    ],
+    tools: ["Jira", "Productboard", "Notion", "Figma", "Salesforce", "HubSpot", "Google Analytics", "Amplitude", "Miro", "Competitive intel (Klue)", "Confluence"],
+    aiTools: ["Perplexity (market intel)", "Claude (launch brief)", "ChatGPT", "Gamma"],
+    companies: ["Notion", "Figma", "Atlassian", "Global Scale Platforms", "Multi-region marketplaces"]
+  },
+  {
+    id: "pmm",
+    label: "Product Marketing Mgr",
+    color: "#4B5563", // Gray
+    bg: "rgba(75, 85, 99, 0.1)",
+    level: "Mid-Senior · 3-6 yrs",
+    comp: "₹20-45L / $80-130K",
+    domain: ["Messaging frameworks (STP, Crossing the Chasm)", "Analyst relations", "Win/loss analysis", "Pricing communication", "Brand narrative", "Demand generation basics", "ABM (account-based marketing)"],
+    targetExp: 4.5,
+    weightTech: 0.20,
+    weightData: 0.50,
+    weightBiz: 0.95,
+    fitNote: "PMMs rule positioning, external messaging hierarchy, analyst relations, and commercial asset enablement.",
+    responsibilities: [
+      { bold: "Positioning and messaging:", rest: " define how the product is positioned in the market — who it's for, what problem it solves, and why it's different. Write the messaging hierarchy: tagline → elevator pitch → feature narrative." },
+      { bold: "Launch management:", rest: " project-manage launches — coordinate product, design, marketing, legal, PR, and sales. Own the launch checklist and go/no-go decision." },
+      { bold: "Competitive intelligence:", rest: " maintain competitive battle cards, track competitor launches, and produce win/loss analysis from sales calls. Feed insights back to product." },
+      { bold: "Sales enablement:", rest: " create pitch decks, one-pagers, ROI calculators, case studies, and demo scripts. Train SDRs and AEs on how to position and sell the product." },
+      { bold: "Customer storytelling:", rest: " find and produce customer case studies, testimonials, and reference accounts. Turn customer outcomes into marketing assets." },
+      { bold: "Analyst relations:", rest: " brief Gartner, Forrester, and IDC analysts. Prepare for Magic Quadrant / Wave submissions. Manage analyst enquiries and reports." },
+      { bold: "Pricing communication:", rest: " communicate pricing changes to customers and the market. Write pricing pages, handle objection training for sales." },
+      { bold: "Content strategy:", rest: " oversee product-related content — blog posts, whitepapers, webinars, and website copy. Ensure technical accuracy and narrative consistency." }
+    ],
+    kpis: [
+      { k: "PMM Influenced Pipeline", v: "$ or ₹ value metric" },
+      { k: "Win rate improvement", v: "% vs baseline standard" },
+      { k: "Launch NPS", v: "Score at 30 days" },
+      { k: "Share of voice (SOV)", v: "vs Core competitors" },
+      { k: "Enablement adoption", v: "% reps utilizing collaterals" },
+      { k: "Analyst tier placement", v: "Gartner MQ / Forrester Wave" }
+    ],
+    tools: ["HubSpot", "Salesforce", "Seismic", "Highspot", "Crayon", "Klue", "Figma", "Canva", "Notion", "Google Analytics", "Semrush", "Gamma"],
+    aiTools: ["Claude (Messaging copy)", "ChatGPT (A/B script variant)", "Perplexity", "Jasper"],
+    companies: ["B2B enterprise giants", "HubSpot", "Freshworks", "Zoho", "Enterprise SaaS scale-ups"]
+  },
+  {
+    id: "principal",
+    label: "Principal / Staff PM",
+    color: "#1E3A8A", // Navy/Slate Blue
+    bg: "rgba(30, 58, 138, 0.1)",
+    level: "Senior-Principal · 7-12 yrs",
+    comp: "₹70-150L / $180-300K",
+    domain: ["Corporate strategy", "M&A due diligence basics", "Board communication", "Org design", "PM career ladders", "OKR design at org level", "Platform economics", "Build-buy-partner decisions"],
+    targetExp: 9.5,
+    weightTech: 0.70,
+    weightData: 0.75,
+    weightBiz: 0.90,
+    fitNote: "Directs organizational strategy, multi-team dependencies, executive board presentation, and talent mentoring structures.",
+    responsibilities: [
+      { bold: "Org-level product vision:", rest: " define and own the multi-year product vision for a large product area or the entire company. Translate company strategy into product bets with clear hypotheses." },
+      { bold: "Multi-team coordination:", rest: " align 3-5 product teams on shared goals without direct authority. Resolve roadmap conflicts, manage shared dependencies, and set cross-team prioritisation frameworks." },
+      { bold: "Executive influence:", rest: " present product strategy to board, investors, and C-suite. Shape company OKRs, resource allocation, and build-vs-buy decisions at the highest level." },
+      { bold: "PM mentorship and levelling:", rest: " mentor junior and senior PMs. Define PM craft standards for the org — what good PRDs, roadmaps, and product reviews look like." },
+      { bold: "Platform and ecosystem strategy:", rest: " define the long-term platform architecture — what should be a platform, what should be a product, and what should be an API. 3-5 year thinking." },
+      { bold: "Build the PM function:", rest: " at early-stage companies, hire and develop the PM team, define hiring rubrics, and build the product review and planning cadence from scratch." },
+      { bold: "External product representation:", rest: " represent the product publicly — conferences, customer advisory boards, analyst briefings, and press. Be the face of the product externally." },
+      { bold: "Strategic M&A input:", rest: " evaluate acquisition targets from a product-fit perspective. Lead product due diligence and integration planning for M&A activity." }
+    ],
+    kpis: [
+      { k: "Company / BU ARR", v: "Org portfolio revenue" },
+      { k: "PM retention / Talent quality", v: "Org health benchmark" },
+      { k: "Strategic bet milestone", v: "% Hit rate on bets" },
+      { k: "Cross-team OKR alignment", v: "% Goals successfully aligned" },
+      { k: "Portfolio-wide NPS", v: "Consolidated index score" },
+      { k: "Analyst representation", v: "Strategic market position" }
+    ],
+    tools: ["Productboard", "Jira", "Miro", "Notion", "Figma", "SQL", "Excel (financial models)", "PowerPoint", "All team stack"],
+    aiTools: ["Claude (strategy papers)", "ChatGPT (scenario planning)", "Perplexity", "Gamma"],
+    companies: ["Series B+ or Post-IPO scaleups", "Amazon", "Google", "Flipkart", "Meesho", "Highly scaled technology players"]
+  }
+];
+
+// Application state tracker
+let activeRoleId = ROLES[0].id;
+let isDark = false;
+let customFitMode = false;
+let currentSearchQuery = "";
+
+window.onload = function() {
+  // Check user system preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    toggleDarkMode();
+  }
+  
+  // Render Left Navigation List and Right Panel detail view
+  buildRoleGrid();
+  renderJDDetails();
+  lucide.createIcons();
+};
+
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const themeIcon = document.getElementById('themeIcon');
+  if (html.classList.contains('dark')) {
+    html.classList.remove('dark');
+    themeIcon.setAttribute('data-lucide', 'moon');
+    isDark = false;
+  } else {
+    html.classList.add('dark');
+    themeIcon.setAttribute('data-lucide', 'sun');
+    isDark = true;
+  }
+  lucide.createIcons();
+}
+
+// Build Navigation selector cards
+function buildRoleGrid() {
+  const grid = document.getElementById('roleGrid');
+  grid.innerHTML = "";
+  
+  ROLES.forEach((role) => {
+    // Generate simple preview metrics for quick glance
+    const matchedFit = calculateDynamicFit(role);
+    
+    // Search query matching filter checks
+    const matchesSearch = queryMatchesRole(role, currentSearchQuery);
+    if (currentSearchQuery && !matchesSearch) return;
+
+    const isActive = role.id === activeRoleId;
+
+    const button = document.createElement('button');
+    button.className = `role-card flex-shrink-0 lg:flex-shrink w-[160px] lg:w-full p-3.5 rounded-xl text-left border transition-all duration-200 snap-start relative group overflow-hidden ${
+      isActive 
+        ? 'bg-zinc-900 border-zinc-950 dark:bg-zinc-100 dark:border-white shadow-md' 
+        : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700'
+    }`;
+    
+    // Color dot representation
+    const dotColor = role.color;
+
+    button.innerHTML = `
+      <div class="flex items-center justify-between gap-2 mb-1.5">
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${dotColor}"></span>
+          <span class="text-xs font-semibold ${isActive ? 'text-white dark:text-zinc-950' : 'text-zinc-900 dark:text-zinc-100'}">${role.label}</span>
+        </span>
+        <span class="text-[9px] font-medium px-1.5 py-0.5 rounded-md ${
+          isActive 
+            ? 'bg-zinc-800 text-zinc-300 dark:bg-zinc-200 dark:text-zinc-700' 
+            : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-800'
+        }">${matchedFit}%</span>
+      </div>
+      <div class="flex justify-between items-center text-[10px] ${isActive ? 'text-zinc-400 dark:text-zinc-600' : 'text-zinc-400 dark:text-zinc-500'}">
+        <span>${role.level.split(' · ')[0]}</span>
+        <span>${role.comp.split(' / ')[0]}</span>
+      </div>
+    `;
+    
+    button.onclick = () => {
+      activeRoleId = role.id;
+      // Re-render
+      buildRoleGrid();
+      renderJDDetails();
+    };
+
+    grid.appendChild(button);
+  });
+
+  if (grid.children.length === 0) {
+    grid.innerHTML = `<p class="text-xs text-zinc-400 dark:text-zinc-500 italic p-4 text-center">No matching roles found.</p>`;
+  }
+}
+
+function calculateDynamicFit(role) {
+  if (!customFitMode) {
+    return (role.id === 'ai') ? 95 : 
+           (role.id === 'consumer') ? 88 :
+           (role.id === 'technical') ? 85 :
+           (role.id === 'b2b') ? 80 :
+           (role.id === 'data') ? 78 :
+           (role.id === 'growth') ? 75 :
+           (role.id === 'gtm') ? 72 : 55;
+  }
+
+  // Custom Quiz Profiler values
+  const expVal = parseFloat(document.getElementById('sliderExp').value);
+  const techVal = parseFloat(document.getElementById('sliderTech').value) / 100;
+  const dataVal = parseFloat(document.getElementById('sliderData').value) / 100;
+  const bizVal = parseFloat(document.getElementById('sliderBiz').value) / 100;
+
+  // Compute deviation indices
+  const expFactor = 1 - Math.min(Math.abs(expVal - role.targetExp) / 8, 0.45);
+  const techDiff = 1 - Math.abs(techVal - role.weightTech) * 0.35;
+  const dataDiff = 1 - Math.abs(dataVal - role.weightData) * 0.35;
+  const bizDiff = 1 - Math.abs(bizVal - role.weightBiz) * 0.35;
+
+  let computedScore = Math.round((expFactor * 0.25 + techDiff * 0.25 + dataDiff * 0.25 + bizDiff * 0.25) * 100);
+  
+  // Constrain bounds between 35% and 99%
+  return Math.max(35, Math.min(computedScore, 99));
+}
+
+// Search Logic implementation
+function handleSearch() {
+  currentSearchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+  buildRoleGrid();
+}
+
+function queryMatchesRole(role, query) {
+  if (!query) return true;
+  if (role.label.toLowerCase().includes(query)) return true;
+  if (role.level.toLowerCase().includes(query)) return true;
+  if (role.domain.some(t => t.toLowerCase().includes(query))) return true;
+  if (role.tools.some(t => t.toLowerCase().includes(query))) return true;
+  if (role.companies.some(t => t.toLowerCase().includes(query))) return true;
+  if (role.responsibilities.some(r => r.bold.toLowerCase().includes(query) || r.rest.toLowerCase().includes(query))) return true;
+  return false;
+}
+
+// Slider changes event
+function updateProfiler() {
+  customFitMode = true;
+
+  // Update Visual Indicators
+  const exp = document.getElementById('sliderExp').value;
+  document.getElementById('expVal').innerText = `${exp} Year${exp !== '1' ? 's' : ''}`;
+
+  const tech = document.getElementById('sliderTech').value;
+  document.getElementById('techVal').innerText = tech > 75 ? 'Expert / Architect' : tech > 45 ? 'Medium (APIs/SQL)' : 'Basic / No-code';
+
+  const data = document.getElementById('sliderData').value;
+  document.getElementById('dataVal').innerText = data > 75 ? 'Heavy ML / Stats' : data > 45 ? 'A/B Test / Visuals' : 'Basic metrics';
+
+  const biz = document.getElementById('sliderBiz').value;
+  document.getElementById('bizVal').innerText = biz > 75 ? 'Sales / Enterprise' : biz > 45 ? 'GTM & Pricing' : 'Core Execution';
+
+  buildRoleGrid();
+  renderJDDetails();
+}
+
+function resetProfiler() {
+  customFitMode = false;
+  document.getElementById('sliderExp').value = 4;
+  document.getElementById('sliderTech').value = 50;
+  document.getElementById('sliderData').value = 50;
+  document.getElementById('sliderBiz').value = 50;
+  
+  document.getElementById('expVal').innerText = "4 Years";
+  document.getElementById('techVal').innerText = "Medium";
+  document.getElementById('dataVal').innerText = "Medium";
+  document.getElementById('bizVal').innerText = "Medium";
+
+  buildRoleGrid();
+  renderJDDetails();
+}
+
+function renderJDDetails() {
+  const container = document.getElementById('jdContainer');
+  const role = ROLES.find(r => r.id === activeRoleId);
+  if (!role) return;
+
+  const currentFit = calculateDynamicFit(role);
+  const fitColor = currentFit >= 85 ? '#10B981' : currentFit >= 70 ? '#F59E0B' : '#EF4444';
+  const fitLabel = currentFit >= 85 ? 'Highly Compatible Match' : currentFit >= 65 ? 'Promising — Skill gaps identified' : 'Requires dynamic preparation';
+
+  // Core Responsibilities list
+  const responsibilitiesHtml = role.responsibilities.map(resp => `
+    <li class="flex items-start gap-3 py-3 border-b border-zinc-100 dark:border-zinc-800/80 last:border-0">
+      <span class="mt-1 text-zinc-300 dark:text-zinc-700 font-bold text-sm shrink-0">→</span>
+      <span class="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+        <strong class="font-semibold text-zinc-900 dark:text-zinc-100">${resp.bold}</strong>${resp.rest}
+      </span>
+    </li>
+  `).join('');
+
+  // Key KPI Metrics
+  const kpisHtml = role.kpis.map(kpi => `
+    <div class="flex items-center justify-between py-2 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 text-xs">
+      <span class="text-zinc-500 dark:text-zinc-400 font-medium">${kpi.k}</span>
+      <span class="text-zinc-900 dark:text-zinc-100 font-semibold text-[11px] bg-zinc-50 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-zinc-200/40 dark:border-zinc-700/40">${kpi.v}</span>
+    </div>
+  `).join('');
+
+  // Pill badge templates
+  const domainHtml = role.domain.map(item => `
+    <span class="text-[10px] px-2.5 py-1 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 rounded-lg text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">${item}</span>
+  `).join('');
+
+  const targetCompaniesHtml = role.companies.map(item => `
+    <span class="text-[10px] px-2.5 py-1 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 rounded-lg text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">${item}</span>
+  `).join('');
+
+  const toolsHtml = role.tools.map(item => `
+    <span class="text-[10px] px-2.5 py-1 bg-zinc-50 dark:bg-indigo-950/20 border border-zinc-200/60 dark:border-indigo-900/40 rounded-lg text-zinc-600 dark:text-indigo-300 font-medium whitespace-nowrap">${item}</span>
+  `).join('');
+
+  const aiToolsHtml = role.aiTools.map(item => `
+    <span class="text-[10px] px-2.5 py-1 bg-indigo-50/50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900 rounded-lg text-indigo-700 dark:text-indigo-300 font-semibold whitespace-nowrap">${item}</span>
+  `).join('');
+
+  // Main interactive HTML block injection
+  container.innerHTML = `
+    <!-- Top Meta Details Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-zinc-200/70 dark:border-zinc-800/80">
+      <div>
+        <h2 class="text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${role.color}"></span>
+          ${role.label.replace('\n', ' ')}
+        </h2>
+        <div class="flex flex-wrap gap-2 mt-2 items-center">
+          <span class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+            ${role.level}
+          </span>
+          <span class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
+            ${role.comp}
+          </span>
+        </div>
+      </div>
+
+      <!-- Copy Markdown / Share Action -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="copyRoleMD('${role.id}')" class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors" title="Copy clean Markdown to Clipboard">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Copy Job Description</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Layout Details Section Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+      <!-- Left sub-column: Responsibilities -->
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-zinc-400"><i data-lucide="clipboard-list" class="w-4 h-4"></i></span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Core Responsibilities</h3>
+        </div>
+        <ul class="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+          ${responsibilitiesHtml}
+        </ul>
+      </div>
+
+      <!-- Right sub-column: KPIs, Domain, and Platforms -->
+      <div class="space-y-6 md:col-span-1">
+        
+        <!-- Ownable KPIs -->
+        <div class="bg-zinc-50/50 dark:bg-zinc-900/30 p-4 rounded-xl border border-zinc-200/40 dark:border-zinc-800/40">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-zinc-400"><i data-lucide="target" class="w-4 h-4"></i></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Ownable KPIs</h3>
+          </div>
+          <div class="space-y-1">
+            ${kpisHtml}
+          </div>
+        </div>
+
+        <!-- Domain Knowledge Tags -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-zinc-400"><i data-lucide="book-open" class="w-4 h-4"></i></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Domain Knowledge</h3>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            ${domainHtml}
+          </div>
+        </div>
+
+        <!-- Target Companies -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-zinc-400"><i data-lucide="building-2" class="w-4 h-4"></i></span>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Target Companies</h3>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            ${targetCompaniesHtml}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tool Stack & AI Tool Gating -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-zinc-400"><i data-lucide="wrench" class="w-4 h-4"></i></span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Must-Know Tool Stack</h3>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          ${toolsHtml}
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-indigo-400"><i data-lucide="cpu" class="w-4 h-4"></i></span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-500/80 dark:text-indigo-400/80">Premium AI Tools for this Role</h3>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          ${aiToolsHtml}
+        </div>
+      </div>
+    </div>
+
+    <!-- Personalized Match Compatibility Sheet -->
+    <div class="bg-zinc-50/80 dark:bg-zinc-900/80 p-5 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 mt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="space-y-1.5 max-w-lg">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] uppercase font-bold tracking-widest text-zinc-400 dark:text-zinc-500">Match Compatibility</span>
+          <span class="px-2 py-0.5 text-[10px] font-semibold rounded" style="color: ${fitColor}; background-color: ${role.bg}">
+            ${fitLabel}
+          </span>
+        </div>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">${role.fitNote}</p>
+      </div>
+
+      <!-- Fit Score Large Display -->
+      <div class="flex items-center gap-4 shrink-0 bg-white dark:bg-zinc-800 p-3 rounded-xl border border-zinc-100 dark:border-zinc-700/60 shadow-sm w-full md:w-auto justify-between md:justify-start">
+        <div class="text-right">
+          <p class="text-[9px] uppercase font-bold text-zinc-400 tracking-wider">Dynamic Score</p>
+          <p class="text-lg font-bold text-zinc-900 dark:text-zinc-100">${currentFit}%</p>
+        </div>
+        <!-- Simple Circular progress bar via custom inline SVG -->
+        <div class="relative w-10 h-10">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path class="text-zinc-200 dark:text-zinc-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="transition-all duration-300" stroke-dasharray="${currentFit}, 100" stroke-width="3" stroke="${fitColor}" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Create Lucide Icons for rendered content
+  lucide.createIcons();
+}
+
+function copyRoleMD(id) {
+  const role = ROLES.find(r => r.id === id);
+  if (!role) return;
+
+  const currentFit = calculateDynamicFit(role);
+
+  // Parse details into professional clean Markdown
+  let md = `# Job Description: ${role.label.replace('\n', ' ')}\n\n`;
+  md += `* **Target Level:** ${role.level}\n`;
+  md += `* **Compensation Range:** ${role.comp}\n`;
+  md += `* **Compatibility Match:** ${currentFit}%\n\n`;
+  
+  md += `## Core Responsibilities\n`;
+  role.responsibilities.forEach(res => {
+    md += `* **${res.bold}** ${res.rest}\n`;
+  });
+
+  md += `\n## Target KPIs & Metrics\n`;
+  role.kpis.forEach(kpi => {
+    md += `* **${kpi.k}:** ${kpi.v}\n`;
+  });
+
+  md += `\n## Target Core Stack & AI Tools\n`;
+  md += `* **Must-know Tools:** ${role.tools.join(', ')}\n`;
+  md += `* **AI Productivity Stack:** ${role.aiTools.join(', ')}\n`;
+
+  md += `\n## Required Domain Knowledge\n`;
+  md += `${role.domain.join(', ')}\n\n`;
+
+  md += `## Target Target Organizations\n`;
+  md += `${role.companies.join(', ')}\n\n`;
+
+  md += `*System Generated via PM Roles Interactive Framework Library*`;
+
+  // Safe fallback to copy via copy-to-clipboard (IFrame compatible alternative)
+  const el = document.createElement('textarea');
+  el.value = md;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+  showToast("Markdown Job Spec copied to Clipboard!");
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  const msgSpan = document.getElementById('toastMessage');
+  msgSpan.innerText = message;
+  
+  // Slide up and fade in
+  toast.classList.remove('translate-y-20', 'opacity-0');
+  toast.classList.add('translate-y-0', 'opacity-100');
+
+  // Fade out
+  setTimeout(() => {
+    toast.classList.add('translate-y-20', 'opacity-0');
+    toast.classList.remove('translate-y-0', 'opacity-100');
+  }, 2500);
+}
+</script>
+</body>
+</html>
